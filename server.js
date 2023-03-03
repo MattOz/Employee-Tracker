@@ -31,7 +31,7 @@ const initialQuestion = [
         ],
         name: 'initialQuestion'
     }
-  ];
+];
 
 const addDepartmentQuestion = [
     {
@@ -73,7 +73,7 @@ const addEmployeeQuestion = [
     {
         type: 'list',
         message: 'Select employee role',
-        choices: [{name: 'Computer Science', value: 1},{name: 'Psychology', value: 2},{name: 'Biology', value: 3}],
+        choices: [{name: 'Professor', value: 1},{name: 'Assistant', value: 2},{name: 'Lab Technician', value: 3}],// change to accept new roles?
         name: 'addEmployeeRole'
     }
 ];
@@ -89,12 +89,15 @@ function startingQuestion() {
 
         case "View all departments":
         viewDepartments();
+        break;
 
         case "View all roles":
         viewRoles();
+        break;
 
         case "View all employees":
         viewEmployees();
+        break;
 
         case "Add department":
         addDepartment();
@@ -111,9 +114,10 @@ function startingQuestion() {
 function viewDepartments() {
     db.query('SELECT * FROM department', function (err, results) {
         console.table(results);
-        mainQ();
-      });
+        initialQuestion();
+    });
 };
+
 
 function viewRoles() {
     db.query('SELECT * FROM role', function (err, results) {
@@ -133,7 +137,7 @@ function addDepartment() {
     inquirer
     .prompt(addDepartmentQuestion)
     .then((response) => {
-        db.query(`INSERT INTO department (employee_name) VALUES ("${response.addDepartment}")`, function (err, results) {
+        db.query(`INSERT INTO department (department_name) VALUES ("${response.addDepartment}")`, function (err, results) {
             if (err) throw err;
         });
         console.log(`Added department`)
