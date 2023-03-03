@@ -2,7 +2,7 @@
   "name": "employee-tracker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/MattOz/Employee-Tracker#readme",
   "dependencies": {
-    "inquirer": "^8.2.4"
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.1.2",
+    "express": "^4.18.2",
+    "console.table": "^0.10.0"
   }
 }

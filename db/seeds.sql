@@ -1,14 +1,14 @@
-INSERT INTO department (department_name)
-VALUES  ("business"),
-        ("computer science"),
-        ("engineering");
+INSERT INTO department (employee_name)
+VALUES ("Computer Science"),
+       ("Psychology"),
+       ("Biology");
 
-INSERT INTO roles (title, salary)
-VALUES  ("business professor", 75000),
-        ("computer science professor", 75000),
-        ("engineering professor", 75000);
+INSERT INTO role (title, salary, department_id)
+VALUES ("Professor", 100000, 1),
+       ("Assistant", 80000, 2),
+       ("Lab Technician", 150000, 3);
 
-INSERT INTO names (first_name, last_name)
-VALUES  ("Brad", "Pitt"),
-        ("Matt", "Damon"),
-        ("Shia", "LeBeouf");
+INSERT INTO employee (first_name, last_name, role_id)
+VALUES ("Brad", "Pitt", 1),
+       ("Matt", "Damon", 2),
+       ("Shia", "LaBeouf", 3);
