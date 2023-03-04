@@ -27,7 +27,9 @@ const initialQuestion = [
             'View all employees', 
             'Add department', 
             'Add role', 
-            'Add employee'
+            'Add employee',
+            'Update role'
+            // 'Exit'
         ],
         name: 'initialQuestion'
     }
@@ -73,10 +75,43 @@ const addEmployeeQuestion = [
     {
         type: 'list',
         message: 'Select employee role',
-        choices: [{name: 'Professor', value: 1},{name: 'Assistant', value: 2},{name: 'Lab Technician', value: 3}],// change to accept new roles?
+        choices: [
+            {name: 'Professor', value: 1},
+            {name: 'Assistant', value: 2},
+            {name: 'Lab Technician', value: 3}
+        ],// change to accept new roles?
         name: 'addEmployeeRole'
+    },
+    {
+        type: 'input',
+        message: 'Enter employee manger ID',
+        name: 'addEmployeeManagerId'
+    },
+];
+
+const updateRoleQuestion = [
+    {
+        type: 'list',
+        message: 'Select employee',
+        choices: getEmployeeList(),
+        name: 'selectEmployee'
+    },
+    {
+        type: 'input',
+        message: 'Enter new role',
+        name: 'updateRole'
     }
 ];
+
+function getEmployeeList() {
+    let currEmployees = []
+    db.query('SELECT id FROM employee', function (err, results) {
+        results.forEach(element => {
+            currEmployees.push(element.id)
+        });
+    });
+    return currEmployees;
+}
 
 function init() {
     startingQuestion();
@@ -88,25 +123,35 @@ function startingQuestion() {
     switch (response.initialQuestion) {
 
         case "View all departments":
-        viewDepartments();
-        break;
+            viewDepartments();
+            break;
 
         case "View all roles":
-        viewRoles();
-        break;
+            viewRoles();
+            break;
 
         case "View all employees":
-        viewEmployees();
-        break;
+            viewEmployees();
+            break;
 
         case "Add department":
-        addDepartment();
+            addDepartment();
+            break;
 
         case "Add role":
-        addRole();
+            addRole();
+            break;
 
         case "Add employee":
-        addEmployee();
+            addEmployee();
+            break;
+
+        case "Update role":
+            updateRole();
+            break;
+
+        // case "Exit":
+        // exitApp();
     }
     });
 };
@@ -114,7 +159,7 @@ function startingQuestion() {
 function viewDepartments() {
     db.query('SELECT * FROM department', function (err, results) {
         console.table(results);
-        initialQuestion();
+        startingQuestion();
     });
 };
 
@@ -122,14 +167,14 @@ function viewDepartments() {
 function viewRoles() {
     db.query('SELECT * FROM role', function (err, results) {
         console.table(results);
-        initialQuestion();
+        startingQuestion();
     });
 };
 
 function viewEmployees() {
     db.query('SELECT * FROM employee', function (err, results) {
         console.table(results);
-        initialQuestion();
+        startingQuestion();
     });
 };
 
@@ -141,7 +186,7 @@ function addDepartment() {
             if (err) throw err;
         });
         console.log(`Added department`)
-        initialQuestion();
+        startingQuestion();
     })
 };
 
@@ -153,7 +198,7 @@ function addRole() {
             if (err) throw err;
         });
         console.log(`Added role`)
-        initialQuestion();
+        startingQuestion();
     })
 };
 
@@ -161,12 +206,31 @@ function addEmployee() {
     inquirer
     .prompt(addEmployeeQuestion)
     .then((response) => {
-        db.query("INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)", [response.addEmployeeFirstName, response.addEmployeeLastName, response.addEmployeeRole], function (err, results) {
+        db.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [response.addEmployeeFirstName, response.addEmployeeLastName, response.addEmployeeRole, response.addEmployeeManagerId], function (err, results) {
             if (err) throw err;
         });
         console.log(`Added role`)
-        initialQuestion();
+        startingQuestion();
     })
 };
+
+function updateRole() {
+    inquirer
+    .prompt(updateRoleQuestion)
+    .then((response) => {
+        // let roleId = response.updateRole
+        // let employeeId = response.selectEmployee
+        db.query("UPDATE employee set role_id = ? where id = ?;", [response.updateRole, response.selectEmployee], function (err, results) {
+            // if (err) throw err;
+            console.log(err)
+        });
+        console.log(`Updated role`)
+        startingQuestion();
+    }
+)};
+
+// function exitApp() {
+//     return
+// };
 
 init();
